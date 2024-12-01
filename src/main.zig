@@ -31,22 +31,6 @@ fn lessThan(context: void, a: u64, b: u64) std.math.Order {
     return std.math.order(a, b);
 }
 
-fn largest(comptime T: type, a: T, b: T) T {
-    if (a < b) {
-        return b;
-    }
-
-    return a;
-}
-
-fn smallest(comptime T: type, a: T, b: T) T {
-    if (a < b) {
-        return a;
-    }
-
-    return b;
-}
-
 fn day1_part1(reader: std.io.AnyReader, allocator: std.mem.Allocator) !u64 {
     const queue = std.PriorityDequeue(u64, void, lessThan);
     var left_numbers = queue.init(allocator, {});
@@ -76,7 +60,7 @@ fn day1_part1(reader: std.io.AnyReader, allocator: std.mem.Allocator) !u64 {
     var total_distance: u64 = 0;
     while (left_numbers.removeMinOrNull()) |left| {
         const right = right_numbers.removeMin();
-        const distance = largest(u64, left, right) - smallest(u64, left, right);
+        const distance = @max(left, right) - @min(left, right);
         total_distance += distance;
     }
 
